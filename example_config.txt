@@ -1,0 +1,10 @@
+# Discord token, needed to login
+discord_token = "token_here"
+# Is this a selfbot/userbot?
+is_selfbot = false
+
+# ID of the source channel, the one where you want to send messages
+src_id = 200050865088502000
+# List of IDs for destination channels
+# These channels recieve whatever was sent in the source channel
+dest_ids = [080900003992150017, 000889009924625408]
