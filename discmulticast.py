@@ -43,8 +43,8 @@ async def on_ready():
     logger.info(
         f'Starting bot as user {bot.user.name}#{bot.user.discriminator}')
     logger.info(
-        f'Listening for messages in \"{bot.get_channel(config["src_id"]).name}({config["src_id"]})\"'
-        f'and multicasting them to {len(config["dest_ids"])} other channels')
+        f'Listening for messages in \"#{bot.get_channel(config["src_id"]).name}\" ({config["src_id"]})'
+        f' and multicasting them to {len(config["dest_ids"])} other channels')
 
 
 @bot.event
