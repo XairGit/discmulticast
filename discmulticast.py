@@ -31,17 +31,17 @@ logging.getLogger('websockets').setLevel(logging.ERROR)
 # Load config
 logger.info('Loading config')
 config = toml.load(environ['DISCMULTI_CONFIG'])
-channels = config['dest_ids']
+destination_channels = config['dest_ids']
 
 # Create bot class
 class Bot(discord.Client):
     """Class implementing bot functionality"""
 
-    def __init__(self):
-        super().__init__()
-
     async def on_ready(self):
-        """Event fired when bot is connected to discord websocket"""
+        """
+        Event fired when bot is connected to discord websocket
+        Currently just used to print status information
+        """
 
         logger.info(
             f'Starting bot as user {self.user.name}#{self.user.discriminator}')
@@ -50,14 +50,16 @@ class Bot(discord.Client):
             f' and multicasting them to {len(config["dest_ids"])} other channels')
 
     async def on_message(self, msg):
-        """Event fired every time the bot sees a new message"""
+        """
+        Event fired every time the bot sees a new message
+        Used to send messages to destination channels
+        """
 
         if msg.channel.id != config['src_id'] or msg.author != self.user:
             return
 
         logger.info(f'Got message with ID {msg.id}, multicasting')
-        # TODO: make edits/deletes multicasted
-        for channel_id in channels:
+        for channel_id in destination_channels:
             channel = self.get_channel(channel_id)
             async with channel.typing():
                 await channel.send(msg.content)
