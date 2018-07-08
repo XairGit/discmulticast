@@ -37,27 +37,35 @@ destination_channels = config['dest_ids']
 class Bot(discord.Client):
     """Class implementing bot functionality"""
 
+    def check(event_handler):
+        """
+        Used as a decorator to check if the bot should act on received events
+        """
+        async def do_checks(self, msg, *args):
+            if msg.channel.id != config['src_id'] or msg.author != self.user:
+                # Ignore input we don't care about
+                return
+            else:
+                await event_handler(self, msg)
+        return do_checks
+
     async def on_ready(self):
         """
         Event fired when bot is connected to discord websocket
         Currently just used to print status information
         """
-
         logger.info(
             f'Starting bot as user {self.user.name}#{self.user.discriminator}')
         logger.info(
             f'Listening for messages in \"#{self.get_channel(config["src_id"]).name}\" ({config["src_id"]})'
             f' and multicasting them to {len(config["dest_ids"])} other channels')
 
+    @check
     async def on_message(self, msg):
         """
         Event fired every time the bot sees a new message
         Used to send messages to destination channels
         """
-
-        if msg.channel.id != config['src_id'] or msg.author != self.user:
-            return
-
         logger.info(f'Got message with ID {msg.id}, multicasting')
         for channel_id in destination_channels:
             channel = self.get_channel(channel_id)
