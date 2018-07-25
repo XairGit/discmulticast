@@ -55,8 +55,7 @@ class Bot(discord.Client):
             if msg.channel.id != config['src_id'] or msg.author != self.user:
                 # Ignore input we don't care about
                 return
-            else:
-                await event_handler(self, msg)
+            await event_handler(self, msg, *args)
 
         return do_checks
 
@@ -82,10 +81,30 @@ class Bot(discord.Client):
         for channel_id in destination_channels:
             channel = self.get_channel(channel_id)
             async with channel.typing():
-                dest_message = await channel.send(msg.content)
-                # Store delete coroutines directly
+                duplicated_message = await channel.send(msg.content)
+                # Store message object directly
                 # because we can't do msg ID lookups without bot account
-                self.message_mapping[msg.id].append(dest_message.delete)
+                self.message_mapping[msg.id].append(duplicated_message)
+
+    @check
+    async def on_message_edit(self, msg_before, msg_after):
+        """
+        Event fired when a message recieves an update event
+        which may be triggered by a number of things
+        including message edits
+
+        May not be triggered if message is not in local cache
+        which happens in large guilds or with old messages
+
+        Used to check for message edits and to broadcast them to destination channels
+        """
+        if msg_before.content == msg_after.content:
+            # Message content is equal, ignore changes
+            return
+        logger.info(f"Got edit event for message ID {msg_before.id}, multicasting")
+        for duplicated_message in self.message_mapping[msg_before.id]:
+            async with duplicated_message.channel.typing():
+                await duplicated_message.edit(content=msg_after.content)
 
     @check
     async def on_message_delete(self, msg):
@@ -98,9 +117,9 @@ class Bot(discord.Client):
         Used to check for deletes and to broadcast them to destination channels
         """
         logger.info(f"Got delete event for message ID {msg.id}, multicasting")
-        for delete_message_func in self.message_mapping[msg.id]:
-            async with msg.channel.typing():
-                await delete_message_func()
+        for duplicated_message in self.message_mapping[msg.id]:
+            async with duplicated_message.channel.typing():
+                await duplicated_message.delete()
         del self.message_mapping[msg.id]
 
 

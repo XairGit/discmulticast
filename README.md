@@ -17,7 +17,7 @@ DISCMULTI_CONFIG=config.toml python discmulticast.py
 The above should work for both windows and linux.
 
 ## Wanted features list
-- [ ] Multicast message edits and deletes
+- [x] Multicast message edits and deletes
 - [ ] Allow for multiple source addresses
 - [ ] Monitor messages from multiple users in source channel, not just bot user
 
