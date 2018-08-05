@@ -40,8 +40,8 @@ class Bot(discord.Client):
     """Class implementing bot functionality"""
 
     def __init__(self):
-        # Stores the ID of a message from a source channel as key and a list of delete
-        # coroutines corresponding to messages in destination channels as values
+        # Stores the ID of a message from a source channel as key and a list of message
+        # objects corresponding to messages in destination channels as values
         # Used to multicast message deletes
         self.message_mapping = defaultdict(list)
         super().__init__()
