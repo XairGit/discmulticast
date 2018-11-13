@@ -1,5 +1,5 @@
 # Discmulticast - multicasting discord messages
-This bot was created to allow one-to-many messages on discord, meaning you can send a single message to one channel and have it automatically sent to many others. It is currently early in development and more features are planned, but the good news is it's usable right now.
+This bot was created to allow one-too-many messages on discord, meaning you can send a single message to one channel and have it automatically sent to many others. It is currently early in development and more features are planned, but the good news is it's usable right now.
 
 It should work on both windows and linux, however windows support is untested.
 
