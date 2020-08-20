@@ -65,7 +65,9 @@ class Bot(discord.Client):
 
         return do_checks
 
-    async def on_ready(self):
+    # TODO: Understand why on_ready no longer gets fired here
+    # For now on_connect is similar enough that we can use that instead
+    async def on_connect(self):
         """
         Event fired when bot is connected to discord websocket
         Currently just used to print status information
@@ -132,6 +134,7 @@ class Bot(discord.Client):
 # Start discord client
 logger.info('Creating client and connecting to Discord API')
 bot = Bot()
+
 # Check if we need to run as a selfbot
 if config['is_selfbot']:
     logger.warning('Running as selfbot - THIS CAN GET YOU BANNED')
@@ -139,3 +142,6 @@ if config['is_selfbot']:
 else:
     logger.info('Running as regular bot')
     bot.run(config['discord_token'])
+
+# Bot has finished executing and logged out once this code is reached, above calls are blocking
+logger.info("Finished logout, closing bot")
