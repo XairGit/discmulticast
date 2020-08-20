@@ -31,7 +31,13 @@ logging.getLogger('websockets').setLevel(logging.ERROR)
 
 # Load config
 logger.info('Loading config')
-config = toml.load(os.environ['DISCMULTI_CONFIG'])
+
+try:
+    config = toml.load(os.environ['DISCMULTI_CONFIG'])
+except (KeyError, FileNotFoundError):
+    logger.error("Failed to load config file from environment variable, please ensure DISCMULTI_CONFIG is defined and points to a valid file")
+    os.sys.exit(1)
+
 destination_channels = config['dest_ids']
 
 
