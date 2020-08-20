@@ -4,7 +4,7 @@ This bot was created to allow one-too-many messages on discord, meaning you can 
 It should work on both windows and linux, however windows support is untested.
 
 ## Requirements
-The bot requires the latest version of python to be installed and uses the rewrite branch of discord.py, plus some other libraries. Everything required can be easily installed using `pip` via `pip install -r requirements.txt`
+The bot requires the latest version of python to be installed and uses the latest version of discord.py, plus some other libraries. Everything required can be easily installed using `pip` via `pip install -r requirements.txt`
 
 ## Running and configuration
 The bot largely operates based on a TOML configuration file, for an example see the [example config](example_config.txt).
